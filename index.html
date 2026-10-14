@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Storyboard - Aplikasi Belajar Bahasa Arab (Awan)</title>
+<style>
+:root{--sky:#e8f4ff;--sky2:#cfe8ff;--blue:#4aa3f0;--deep:#1f6fc5;--ink:#17324d;--mute:#6b86a1;--white:#fff;--ok:#2fb67c;--bad:#ef6a6a;--gold:#f6c453}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI",system-ui,sans-serif;color:var(--ink);background:linear-gradient(180deg,#dff0ff 0%,#f6fbff 60%,#fff 100%);min-height:100vh}
+header{text-align:center;padding:40px 20px 10px}
+header h1{font-size:30px;color:var(--deep)}
+header p{color:var(--mute);margin-top:6px}
+.legend{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.chip{background:#fff;border:1px solid var(--sky2);border-radius:99px;padding:6px 14px;font-size:13px;color:var(--deep)}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:34px 24px;max-width:1300px;margin:20px auto 60px;padding:0 24px}
+.scene{display:flex;flex-direction:column;align-items:center}
+.scene .num{font-weight:700;color:var(--deep);margin-bottom:4px}
+.scene .cap{font-size:13px;color:var(--mute);text-align:center;max-width:300px;margin-top:12px;line-height:1.5}
+.phone{width:290px;height:560px;border-radius:34px;background:#fff;border:8px solid #fff;box-shadow:0 18px 40px rgba(31,111,197,.18),0 0 0 1px var(--sky2);overflow:hidden;position:relative;display:flex;flex-direction:column}
+.sky{background:linear-gradient(180deg,#bfe0ff,#eaf5ff 55%,#fff);position:relative}
+.cloud{position:absolute;background:#fff;border-radius:99px;opacity:.9;filter:drop-shadow(0 4px 6px rgba(74,163,240,.15))}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.c1{width:70px;height:22px;top:30px;left:20px}.c1:before{width:30px;height:30px;top:-14px;left:10px}.c1:after{width:24px;height:24px;top:-10px;left:36px}
+.c2{width:54px;height:18px;top:70px;right:18px}.c2:before{width:24px;height:24px;top:-11px;left:8px}.c2:after{width:18px;height:18px;top:-7px;left:28px}
+.body{padding:18px 16px;flex:1;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mute)}
+h2{font-size:19px}
+.ar{font-family:"Amiri","Traditional Arabic","Scheherazade New",serif;direction:rtl;font-size:22px;line-height:1.9;text-align:right}
+.btn{background:linear-gradient(180deg,#5db3ff,var(--deep));color:#fff;border:0;border-radius:16px;padding:12px;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 6px 14px rgba(31,111,197,.3)}
+.btn.ghost{background:#fff;color:var(--deep);box-shadow:none;border:1.5px solid var(--sky2)}
+.card{background:#fff;border-radius:18px;padding:12px;box-shadow:0 4px 14px rgba(74,163,240,.15);border:1px solid var(--sky)}
+.tabs{display:flex;background:#fff;border-top:1px solid var(--sky);padding:8px 0;justify-content:space-around;font-size:11px;color:var(--mute)}
+.tabs b{color:var(--deep)}
+.mascot{font-size:64px;text-align:center}
+.lvl{display:flex;align-items:center;gap:10px}
+.dot{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#fff;background:var(--blue);box-shadow:0 4px 0 var(--deep)}
+.dot.lock{background:#c9d8e6;box-shadow:0 4px 0 #a8bacb}
+.path{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.path .lvl:nth-child(2){margin-left:50px}.path .lvl:nth-child(3){margin-left:20px}.path .lvl:nth-child(4){margin-left:70px}
+.bar{height:8px;border-radius:9px;background:var(--sky);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#7cc4ff,var(--deep))}
+.tag{font-size:11px;background:var(--sky);color:var(--deep);border-radius:8px;padding:2px 8px}
+.w{cursor:pointer;border-radius:6px;padding:0 2px}.w:hover,.w.on{background:#fff2c2}
+.tip{background:#fffbe8;border:1px solid #f3e2a0;border-radius:12px;padding:8px;font-size:12px;min-height:44px}
+.wave{display:flex;gap:3px;align-items:center;height:40px;justify-content:center}
+.wave i{width:4px;background:var(--blue);border-radius:3px;animation:b 1s infinite ease-in-out}
+@keyframes b{0%,100%{height:8px}50%{height:34px}}
+.wave i:nth-child(2n){animation-delay:.2s}.wave i:nth-child(3n){animation-delay:.4s}
+.paused .wave i{animation:none;height:10px}
+.mark-bad{background:#ffe1e1;border-bottom:2px solid var(--bad);border-radius:4px}
+.mark-ok{background:#dff6ea;border-radius:4px}
+.flip{perspective:800px;height:200px;cursor:pointer}
+.flip>div{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.f>div{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px;text-align:center;box-shadow:0 10px 24px rgba(74,163,240,.25)}
+.flip .front{background:#fff;border:1px solid var(--sky2)}
+.flip .back{background:linear-gradient(160deg,#5db3ff,var(--deep));color:#fff;transform:rotateY(180deg)}
+.rate{display:flex;gap:6px}.rate button{flex:1;border:0;border-radius:12px;padding:9px 0;font-size:12px;font-weight:600;cursor:pointer}
+.mic{width:64px;height:64px;border-radius:50%;background:linear-gradient(180deg,#5db3ff,var(--deep));color:#fff;display:grid;place-items:center;font-size:28px;margin:auto;box-shadow:0 0 0 10px rgba(74,163,240,.18)}
+textarea{width:100%;border:1.5px dashed var(--sky2);border-radius:14px;padding:10px;font-size:20px;direction:rtl;font-family:"Amiri","Traditional Arabic",serif;background:#fff;resize:none;height:110px}
+.flow{max-width:1000px;margin:0 auto 30px;padding:0 24px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center;font-size:14px}
+.flow span.s{background:#fff;border:1.5px solid var(--sky2);border-radius:14px;padding:8px 14px;color:var(--deep);font-weight:600}
+.notes{max-width:1000px;margin:0 auto 60px;padding:0 24px}
+.notes h3{color:var(--deep);margin:22px 0 8px}
+.notes table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 14px rgba(74,163,240,.12)}
+.notes th,.notes td{padding:10px 12px;text-align:left;font-size:14px;border-bottom:1px solid var(--sky)}
+.notes th{background:var(--sky);color:var(--deep)}
+.notes li{margin:6px 0 6px 20px;font-size:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <h1>☁️ Awan Arab - Storyboard</h1>
+  <p>Belajar bahasa Arab lewat cerita pendek: baca, dengar, tulis ulang, baca lagi. Klik kata Arab dan kartu untuk mencoba.</p>
+  <div class="legend"><span class="chip">Biru langit + putih</span><span class="chip">Level A1 - A4</span><span class="chip">1 episode = 2-3 menit</span><span class="chip">Koreksi oleh AI</span></div>
+</header>
+
+<div class="flow">
+  <span class="s">1 Baca</span>→<span class="s">2 Dengar</span>→<span class="s">3 Tulis ulang</span>→<span class="s">4 Koreksi AI</span>→<span class="s">5 Baca kembali (rekam suara)</span>→<span class="s">6 Flashcard</span>
+</div>
+
+<div class="board">
+
+<!-- 1 splash -->
+<div class="scene"><div class="num">Layar 1 · Pembuka</div>
+<div class="phone"><div class="sky body" style="justify-content:center;align-items:center;text-align:center;gap:14px">
+  <i class="cloud c1"></i><i class="cloud c2"></i>
+  <div class="mascot">☁️</div>
+  <h2 style="font-size:28px;color:var(--deep)">Awan Arab</h2>
+  <p style="color:var(--mute);font-size:14px">Belajar Arab lewat kisah para nabi,<br>sahabat, dan tauhid.</p>
+  <div class="ar" style="text-align:center;font-size:26px;color:var(--deep)">اِقْرَأْ وَاسْمَعْ وَاكْتُبْ</div>
+  <button class="btn" style="width:80%">Mulai Belajar</button>
+  <button class="btn ghost" style="width:80%">Tes level dulu (2 menit)</button>
+</div></div>
+<div class="cap">Ramah dan tenang. Pilih langsung mulai dari A1 atau tes singkat untuk menentukan level.</div></div>
+
+<!-- 2 home -->
+<div class="scene"><div class="num">Layar 2 · Beranda & Level</div>
+<div class="phone"><div class="sky" style="height:130px;position:relative"><i class="cloud c1"></i><i class="cloud c2"></i>
+  <div style="position:absolute;bottom:14px;left:16px;right:16px"><div style="font-size:12px;color:var(--mute)">Assalamu'alaikum 👋</div><h2>Lanjut Episode 3</h2><div class="bar" style="margin-top:8px"><i style="width:40%"></i></div></div></div>
+<div class="body" style="padding-top:10px">
+  <div class="top"><b style="color:var(--ink)">Jalur Belajar</b><span>🔥 5 hari</span></div>
+  <div class="path">
+    <div class="lvl"><div class="dot">A1</div><div><b>Pemula</b><br><span class="tag">Kisah Nabi Ibrahim</span></div></div>
+    <div class="lvl"><div class="dot">A2</div><div><b>Dasar</b><br><span class="tag">Kisah Nabi Yusuf</span></div></div>
+    <div class="lvl"><div class="dot lock">A3</div><div><b>Menengah awal</b><br><span class="tag">Sahabat Nabi</span></div></div>
+    <div class="lvl"><div class="dot lock">A4</div><div><b>Menengah</b><br><span class="tag">Tauhid & tsaqofah</span></div></div>
+  </div>
+</div>
+<div class="tabs"><b>🏠<br>Beranda</b><span>📖<br>Cerita</span><span>🃏<br>Kartu</span><span>📈<br>Progres</span></div></div>
+<div class="cap">Jalur seperti awan yang naik. Level terkunci terbuka setelah lulus kuis akhir level.</div></div>
+
+<!-- 3 library -->
+<div class="scene"><div class="num">Layar 3 · Pustaka Cerita</div>
+<div class="phone"><div class="body" style="background:var(--sky)">
+  <h2>Cerita A1</h2>
+  <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag" style="background:var(--deep);color:#fff">Kisah Qur'an</span><span class="tag">Nabi</span><span class="tag">Sahabat</span><span class="tag">Tauhid</span><span class="tag">Tsaqofah</span></div>
+  <div class="card"><b>Ep. 1 · Ibrahim & Bintang</b><br><span style="font-size:12px;color:var(--mute)">⏱ 2 menit · 6 kalimat · 12 kata baru</span><div class="bar" style="margin-top:8px"><i style="width:100%"></i></div></div>
+  <div class="card"><b>Ep. 2 · Ibrahim & Berhala</b><br><span style="font-size:12px;color:var(--mute)">⏱ 3 menit · 7 kalimat · 14 kata baru</span><div class="bar" style="margin-top:8px"><i style="width:70%"></i></div></div>
+  <div class="card"><b>Ep. 3 · Api Jadi Sejuk</b><br><span style="font-size:12px;color:var(--mute)">⏱ 3 menit · 8 kalimat</span></div>
+  <div class="card" style="opacity:.6"><b>🔒 Ep. 4 · Ka'bah</b></div>
+</div></div>
+<div class="cap">Episode pendek ala serial. Urutan topik: kisah Qur'an → nabi → sahabat → tauhid → tsaqofah, dengan nada santai untuk anak muda.</div></div>
+
+<!-- 4 read -->
+<div class="scene"><div class="num">Layar 4 · Baca (klik kata)</div>
+<div class="phone"><div class="body">
+  <div class="top"><span>✕</span><b style="color:var(--ink)">Ep. 1 · Ibrahim & Bintang</b><span>1/4</span></div>
+  <div class="bar"><i style="width:25%"></i></div>
+  <div class="card ar" id="story">
+    <span class="w" data-t="Ibrahim">إِبْرَاهِيمُ</span> <span class="w" data-t="pemuda (syabbun)">شَابٌّ</span> <span class="w" data-t="cerdas (dzakiyyun)">ذَكِيٌّ</span>.<br>
+    <span class="w" data-t="ia melihat (ra'a)">رَأَى</span> <span class="w" data-t="sebuah bintang (kaukaban)">كَوْكَبًا</span> <span class="w" data-t="di (fi)">فِي</span> <span class="w" data-t="malam (al-lail)">اللَّيْلِ</span>.<br>
+    <span class="w" data-t="ia berkata (qala)">قَالَ</span>: <span class="w" data-t="ini (hadza)">هَذَا</span> <span class="w" data-t="Tuhanku (rabbi)">رَبِّي</span>!
+  </div>
+  <div class="tip" id="tip">Ketuk kata Arab untuk melihat artinya. Kata yang diketuk masuk ke Flashcard.</div>
+  <div class="card" style="font-size:13px;color:var(--mute)">🇮🇩 Ibrahim pemuda yang cerdas. Ia melihat sebuah bintang di malam hari. Ia berkata: "Ini Tuhanku!"</div>
+  <button class="btn">Lanjut ke Dengar 🎧</button>
+</div></div>
+<div class="cap">Teks berharakat di level A1-A2, harakat berkurang di A3-A4. Terjemahan bisa disembunyikan.</div></div>
+
+<!-- 5 listen -->
+<div class="scene"><div class="num">Layar 5 · Dengar</div>
+<div class="phone" id="lis"><div class="sky body" style="align-items:center;text-align:center">
+  <i class="cloud c1"></i><i class="cloud c2"></i>
+  <div class="top" style="width:100%;margin-top:6px"><span>✕</span><b style="color:var(--ink)">Dengarkan</b><span>2/4</span></div>
+  <div class="card" style="width:100%;margin-top:34px"><div class="ar" style="text-align:center">قَالَ: هَذَا رَبِّي!</div><div style="font-size:12px;color:var(--mute)">kalimat 3 dari 6</div></div>
+  <div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div style="display:flex;gap:14px;align-items:center;justify-content:center">
+    <button class="btn ghost" style="border-radius:50%;width:44px;height:44px;padding:0">⏮</button>
+    <button class="btn" id="play" style="border-radius:50%;width:66px;height:66px;padding:0;font-size:24px">▶</button>
+    <button class="btn ghost" style="border-radius:50%;width:44px;height:44px;padding:0">⏭</button>
+  </div>
+  <div style="display:flex;gap:6px"><span class="tag">0.7x</span><span class="tag" style="background:var(--deep);color:#fff">1x</span><span class="tag">1.2x</span></div>
+  <div style="display:flex;gap:8px;width:100%"><button class="btn ghost" style="flex:1;font-size:12px">Sembunyikan teks</button><button class="btn ghost" style="flex:1;font-size:12px">Ulangi kalimat</button></div>
+  <button class="btn" style="width:100%;margin-top:auto">Lanjut ke Menulis ✍️</button>
+</div></div>
+<div class="cap">Putar per kalimat, kecepatan bisa diatur. Mode "tanpa teks" melatih telinga. (Tombol ▶ di prototipe ini mencoba suara Arab dari browser.)</div></div>
+
+<!-- 6 write -->
+<div class="scene"><div class="num">Layar 6 · Tulis Ulang</div>
+<div class="phone"><div class="body">
+  <div class="top"><span>✕</span><b style="color:var(--ink)">Tulis ulang ceritanya</b><span>3/4</span></div>
+  <div class="tip">Tuliskan lagi cerita tadi dengan kata-katamu sendiri dalam bahasa Arab. Boleh pendek.</div>
+  <textarea id="wr">إبراهيم شاب ذكي. رأى نجم في الليل. قال هذا ربي</textarea>
+  <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag">Petunjuk: كَوْكَب</span><span class="tag">Petunjuk: غَابَ</span><span class="tag">Keyboard Arab ⌨️</span></div>
+  <div style="font-size:12px;color:var(--mute)">Tanpa melihat cerita. Tombol "Intip" memakai 1 bintang ⭐.</div>
+  <button class="btn" style="margin-top:auto">Kirim untuk dikoreksi ✨</button>
+</div></div>
+<div class="cap">Murid menulis dari ingatan. Ada petunjuk kata dan keyboard Arab di dalam aplikasi.</div></div>
+
+<!-- 7 correction -->
+<div class="scene"><div class="num">Layar 7 · Koreksi AI</div>
+<div class="phone"><div class="body" style="background:var(--sky)">
+  <div class="top"><span>←</span><b style="color:var(--ink)">Hasil koreksi</b><span>Skor 78 ⭐⭐</span></div>
+  <div class="card ar" style="font-size:20px">إِبْرَاهِيمُ شَابٌّ ذَكِيٌّ. رَأَى <span class="mark-bad">نَجْم</span> فِي اللَّيْلِ. قَالَ هَذَا رَبِّي</div>
+  <div class="card" style="font-size:13px;border-left:4px solid var(--bad)"><b>❌ نجم → نَجْمًا</b><br>Objek setelah kata kerja (<i>maf'ul bih</i>) berharakat <i>fathatain</i>: <span class="ar" style="font-size:18px">رَأَى نَجْمًا</span><br><span style="color:var(--mute)">Atau pakai kata dari cerita: كَوْكَبًا</span></div>
+  <div class="card" style="font-size:13px;border-left:4px solid var(--gold)"><b>💡 Tanda baca</b><br>Tambahkan titik dua setelah <span class="ar" style="font-size:16px">قَالَ</span> sebelum ucapan.</div>
+  <div class="card" style="font-size:13px;border-left:4px solid var(--ok)"><b>✅ Bagus!</b> Susunan kalimat sudah benar, kata <span class="mark-ok ar" style="font-size:16px">شَابٌّ ذَكِيٌّ</span> tepat.</div>
+  <button class="btn" style="margin-top:auto">Baca versi yang benar 🎙️</button>
+</div></div>
+<div class="cap">Koreksi dikerjakan oleh Claude: kesalahan ditandai merah, alasan dijelaskan singkat dengan bahasa Indonesia, plus pujian untuk yang sudah benar.</div></div>
+
+<!-- 8 read back -->
+<div class="scene"><div class="num">Layar 8 · Baca Kembali</div>
+<div class="phone"><div class="sky body" style="align-items:center;text-align:center">
+  <i class="cloud c1"></i><i class="cloud c2"></i>
+  <div class="top" style="width:100%;margin-top:6px"><span>✕</span><b style="color:var(--ink)">Bacakan tulisanmu</b><span>4/4</span></div>
+  <div class="card" style="width:100%;margin-top:30px"><div class="ar" style="text-align:center;font-size:21px">إِبْرَاهِيمُ شَابٌّ ذَكِيٌّ.<br>رَأَى <span style="background:#fff2c2;border-radius:6px">نَجْمًا</span> فِي اللَّيْلِ.<br>قَالَ: هَذَا رَبِّي</div></div>
+  <div class="mic">🎙️</div>
+  <div style="font-size:13px;color:var(--mute)">Ketuk dan bacakan. Kata yang sedang dibaca disorot.</div>
+  <div class="card" style="width:100%;font-size:13px;text-align:left"><b>Hasil bacaan</b><br>Kata terbaca benar: 11/12<br><span class="mark-bad">كَوْكَبًا</span> perlu diulang (huruf ك dan ب)</div>
+  <button class="btn" style="width:100%;margin-top:auto">Selesai · +20 XP 🎉</button>
+</div></div>
+<div class="cap">Murid membaca tulisannya yang sudah benar. Pengenalan suara menandai kata yang kurang tepat.</div></div>
+
+<!-- 9 flashcards -->
+<div class="scene"><div class="num">Layar 9 · Flashcard (ketuk kartu)</div>
+<div class="phone"><div class="body" style="background:var(--sky)">
+  <div class="top"><span>←</span><b style="color:var(--ink)">Kartu hari ini</b><span>4/12</span></div>
+  <div class="bar"><i style="width:33%"></i></div>
+  <div class="flip" id="fc"><div>
+    <div class="face front"><span class="tag">kata benda</span><div class="ar" style="text-align:center;font-size:44px">كَوْكَب</div><span style="font-size:12px;color:var(--mute)">ketuk untuk membalik</span></div>
+    <div class="face back"><div style="font-size:26px;font-weight:700">Bintang</div><div class="ar" style="text-align:center;font-size:17px">رَأَى كَوْكَبًا فِي اللَّيْلِ</div><div style="font-size:12px;opacity:.9">Ia melihat bintang di malam hari</div><div>🔊 ☁️</div></div>
+  </div></div>
+  <div class="rate"><button style="background:#ffe1e1;color:#b13c3c">Lupa</button><button style="background:#fff2c2;color:#8a6a00">Ragu</button><button style="background:#dff6ea;color:#1b7a52">Ingat</button></div>
+  <div style="font-size:12px;color:var(--mute);text-align:center">Pengulangan berjarak: kartu yang lupa muncul lebih cepat</div>
+  <div style="display:flex;gap:6px"><button class="btn ghost" style="flex:1;font-size:12px">🎧 Mode dengar</button><button class="btn ghost" style="flex:1;font-size:12px">🧩 Cocokkan</button></div>
+</div></div>
+<div class="cap">Kartu 3D yang berbalik, otomatis berisi kata dari cerita dan kata yang diketuk. Ada mode dengar dan mode cocokkan supaya tidak membosankan.</div></div>
+
+<!-- 10 progress -->
+<div class="scene"><div class="num">Layar 10 · Progres</div>
+<div class="phone"><div class="sky" style="height:150px;position:relative"><i class="cloud c1"></i><i class="cloud c2"></i>
+  <div style="position:absolute;bottom:14px;left:16px;right:16px"><h2>Level A1</h2><div style="font-size:13px;color:var(--mute)">Hampir lulus: 3 dari 5 episode</div><div class="bar" style="margin-top:8px"><i style="width:60%"></i></div></div></div>
+<div class="body" style="padding-top:12px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div class="card" style="text-align:center"><b style="font-size:22px">🔥 5</b><br><span style="font-size:12px;color:var(--mute)">hari beruntun</span></div>
+    <div class="card" style="text-align:center"><b style="font-size:22px">86</b><br><span style="font-size:12px;color:var(--mute)">kata dikuasai</span></div>
+    <div class="card" style="text-align:center"><b style="font-size:22px">82</b><br><span style="font-size:12px;color:var(--mute)">rata-rata skor tulis</span></div>
+    <div class="card" style="text-align:center"><b style="font-size:22px">320</b><br><span style="font-size:12px;color:var(--mute)">XP</span></div>
+  </div>
+  <div class="card" style="font-size:13px"><b>Sering salah</b><br>• Harakat objek (fathatain)<br>• Kata ganti هُوَ / هِيَ</div>
+  <button class="btn">Latihan titik lemah</button>
+</div>
+<div class="tabs"><span>🏠<br>Beranda</span><span>📖<br>Cerita</span><span>🃏<br>Kartu</span><b>📈<br>Progres</b></div></div>
+<div class="cap">Statistik ringan dan jelas. Titik lemah dari koreksi dipakai untuk membuat latihan khusus.</div></div>
+
+</div>
+
+<div class="notes">
+  <h3>Struktur level dan isi cerita</h3>
+  <table>
+    <tr><th>Level</th><th>Kalimat per episode</th><th>Bahasa</th><th>Tema cerita</th></tr>
+    <tr><td>A1</td><td>5-8, sangat pendek</td><td>Kalimat nominal & kata kerja lampau sederhana, harakat penuh</td><td>Kisah Qur'an dan nabi: Ibrahim, Nuh, Yusuf</td></tr>
+    <tr><td>A2</td><td>8-12</td><td>Dialog pendek, kata sambung (ثُمَّ، لِأَنَّ)</td><td>Nabi lain dan kisah sahabat: Bilal, Abu Bakar</td></tr>
+    <tr><td>A3</td><td>10-15</td><td>Harakat sebagian, kata kerja sekarang & perintah</td><td>Tauhid lewat kisah dan perenungan ayat</td></tr>
+    <tr><td>A4</td><td>12-18</td><td>Tanpa harakat, kalimat majemuk</td><td>Tsaqofah Islam: adab, sejarah, tokoh ulama</td></tr>
+  </table>
+  <h3>Gaya cerita untuk anak muda</h3>
+  <ul>
+    <li>Judul episode seperti serial ("Ibrahim & Bintang"), ada cliffhanger kecil di akhir.</li>
+    <li>Dialog pendek, kalimat aktif, dan satu pertanyaan renungan di akhir yang ringan.</li>
+    <li>Isi mengikuti sumber Qur'an dan hadis yang sahih; kisah dibuat singkat tanpa menambah detail yang tidak ada dasarnya.</li>
+  </ul>
+  <h3>Catatan teknis untuk tahap berikutnya</h3>
+  <ul>
+    <li>Koreksi tulisan: model AI membaca tulisan murid, menandai kesalahan tata bahasa, ejaan, dan harakat, lalu menjelaskan dalam bahasa Indonesia.</li>
+    <li>Suara: audio Arab direkam atau dibuat dengan TTS Arab. Untuk narasi bahasa Indonesia, kata "Allah" diucapkan "Aul lohh" (teks di layar tetap "Allah").</li>
+    <li>Baca kembali: pengenalan suara Arab (ar-SA) untuk menyorot kata yang kurang tepat.</li>
+    <li>Flashcard: pengulangan berjarak (spaced repetition), kartu otomatis dari kata cerita.</li>
+    <li>Platform yang disarankan: web app (PWA) dulu, agar cepat diuji di HP.</li>
+  </ul>
+</div>
+
+<script>
+// klik kata -> arti
+const tip=document.getElementById('tip');
+document.querySelectorAll('.w').forEach(w=>w.onclick=()=>{
+  document.querySelectorAll('.w.on').forEach(x=>x.classList.remove('on'));
+  w.classList.add('on');
+  tip.innerHTML='<b class="ar" style="font-size:18px">'+w.textContent+'</b> = '+w.dataset.t+' &nbsp;✔ masuk Flashcard';
+});
+// flashcard
+document.getElementById('fc').onclick=e=>e.currentTarget.classList.toggle('f');
+// dengar: Arab pakai suara browser. Teks Indonesia: Allah -> "Aul lohh" saat diucapkan
+function speakId(t){return t.replace(/Allah/g,'Aul lohh')}
+const lis=document.getElementById('lis'),play=document.getElementById('play');
+let playing=true;
+play.onclick=()=>{
+  playing=!playing;
+  lis.classList.toggle('paused',!playing);
+  play.textContent=playing?'⏸':'▶';
+  if(playing&&'speechSynthesis' in window){
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance('قَالَ: هَذَا رَبِّي');u.lang='ar-SA';u.rate=.8;speechSynthesis.speak(u);
+  } else if('speechSynthesis' in window){speechSynthesis.cancel()}
+};
+play.textContent='⏸';
+</script>
+</body>
+</html>
